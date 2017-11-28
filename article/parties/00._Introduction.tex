@@ -1,0 +1,186 @@
+\section{Rapide historique de GNU/Linux}
+
+  \subsection{UNIX}
+	
+	Le premier système d'exploitation a été conçu par  Ken Thompson et Dennis Ritchie (AT\&T Bell Laboratories)
+	en 1970. Il était écrit en C déjà.
+	
+	BSD a tenté de faire un fork mais un procès a eu lieu car BSD embarquait des codes propriétés de AT\&T.
+	
+	(ce qui a changé depuis, BSD est open source complètement). Mais ça a freiné l'expansion de BSD.
+	
+
+
+  \subsection{Le noyau}
+	
+	Il assure l'interface entre les logiciels et le matériel. 
+	
+	MINIX, un système Unix-like pour usage académique a été écrit par Andrew S. Tanenbaum.
+	
+	Puis Linus Torvals, le 25 August 1991, poste un message pour dire qu'il a écrit un MINIX like en C qui 
+	pouvait faire tourner un compilateur et bash (le mode console).
+	
+	Appelée au début FreaX, il fut renommer par un administrateur d'un serveur FTP Linux. Ce qui fut accepté par Linus Torvalds.
+	
+	Rapidement il fut placé sur  GNU General Public License (GPL)~: v1 puis v2 et enfin v3. 
+	
+
+	
+	Il rassembla pas mal de développeurs et surtout des companies vont s'en emparer. En effet en 2015, 80\% 
+	des développeurs sont rémunérés pour leurs contributions.
+	
+
+
+  \subsection{Le projet GNU}
+  
+  Tout cela (le succès de Linux) n'aura pas eu lieu sans le projet GNU lancé par Richard Stallman qui, 
+	en 1983, a démarré le projet GNU  avec le projet de créer un clone d'UNIX opensource. La communauté est aussi à l'origine
+	des licences qui encadrent la plupart des logiciels opensource.
+
+
+  \subsection{Le débuts des distributions}
+  
+		En 1993 deux distributions ont été crées pour faciliter l'installation et la maintenance des systèmes GNU/Linux~: Slackware et Debian.
+		
+		Aujourd'hui faire Linux from Scratch (entièrement à la main) est reservé à l'apprentissage. Ce sont les distributions (la pléthore) de distributions
+		qui permet d'installer et de gérer son ordinateur sous GNU/Linux.
+
+
+\section{Versions}
+
+  \subsection{Unstable}
+	
+	Dans une première étape, une version expérimentale est réalisée. Elle est dite \emph{unstable}.
+	
+	Elle n'est pas recommandé pour les novices et en production. A ce stade les versions des logiciels ne sont pas toujours 
+	fixées.
+	
+	Souvent son numéro après la virgule est impaire (au moins pour les Debian et Fedora).
+	
+
+  \subsection{Release candidate}
+	
+	Dans cette version plus mature, la plupart des gros bugs sont résolus. A cette étape, les testeurs et développeurs
+	chasse les derniers bugs mineures. La version des logiciels dans la distribution est fixée à ce stade.
+	
+	Souvent on la voit retrouve appelée RC pour Release Candidate, plus le nombre augmente plus la version est fiable.
+			
+
+  \subsection{Stable}
+	
+	Dans cette version mature, les bogues sont résolus. A cette étape, la distribution est stable et peut être installé par tous.
+	
+	Le temps durant lequel la communauté fournit les mises à jour varie selon la version et la distribution (support de la version). Par exemple pour 
+	la Debian c'est trois ans.
+			
+
+  \subsection{Long Term Support}
+	
+	Certaines distributions comme Ubuntu, distingue deux types de distributions~:
+	\begin{description}
+		\item les versions normales (pour Ubuntu x.10) supportées pendant une brêve période
+		\item les versions LTS qui sont supportées pendant plus longtemps (pour Ubuntu x.04 pendant 5 ans)
+	\end{description}
+	
+	
+
+  \subsection{Trouver la version installée}
+	
+	En console il suffit de taper \emph{lsb\_release -a}.
+	
+	Dans paramètres sous GNOME, on peut l'avoir dans le groupe \og~Détails~\fg.
+	
+
+	
+	\begin{center}
+	\begin{figure}
+	\includegraphics[scale=0.25]{Figures/Selection004}
+	\caption{Version sous GNOME}
+	\end{figure}
+	\end{center}
+	
+
+\section{Recommandations}
+
+  \subsection{Versions préconisées}
+	
+	\begin{description}
+		\item[Ubuntu] c'est la plus simple à utiliser pour un novice. Enfant de Debian elle a aussi le plus gros volume de documentation en ligne. Des variantes pour les ordinosaures existent comme Lubuntu
+		\item[Mint] Enfant d'Ubuntu, on a les mêmes avantages mais avec un bureau par défaut de type Cinnamon
+		\item[Fedora] c'est celle, qui dans la simplicité, vient juste après. Il y a quelques manipulations à faire pour avoir les contenus
+		non libres comme les plug ins Flash\dots après l'installation.
+		\item[Arch,Manjaro] pour les aventureux qui veulent les logiciels \og~on the edge~\fg
+	\end{description}
+		
+
+  \subsection{Préconisations à l'installation}
+
+	\begin{itemize}
+		\item Lors de l'installation, faites la sur un disque entier puis avec ce que nous verrons, mettez le home sur un disque différent pour avoir plus de place et 
+	pour en cas de réinstallation avoir toujours votre HOME propre.
+	\end{itemize}
+			
+
+  \subsection{Préconisations à l'installation d'Ubuntu}
+
+	Ubuntu installe le plugin flash, le MP3 si demandé à l'installation. Il ne reste plus grand chose à faire.
+	
+	A la rigueur le dépot Google pour Chrome (Netflix, CanalPlay,\dots)~:
+	
+\begin{verbatim}
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+sudo echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+\end{verbatim}	
+			
+
+
+	Et GNOME-tweak-tool si il n'est pas installé~:
+\begin{verbatim}
+sudo apt-get install gnome-tweak-tool	
+\end{verbatim}
+
+
+
+  \subsection{Préconisations à l'installation pour Fedora}
+
+	\begin{itemize}
+		\item Ajouter les dépots rpmfusion~:
+	\begin{verbatim}
+sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm	
+sudo dnf install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+	\end{verbatim}
+	\end{itemize}
+			
+
+
+	\begin{itemize}
+		\item Installer Yum \emph{dnf install yum}
+		\item Installer GNOME Tweak Tool \emph{dnf install gnome-tweak-tool}
+		\item Installer flash-player-ppapi et/ou flash-plugin 
+	\end{itemize}
+	
+	
+
+	\begin{itemize}
+			\item pour installer les logiciels google comme Chrome pour Netflix, \dots
+\begin{verbatim}
+cat << EOF > /etc/yum.repos.d/google-chrome.repo
+[google-chrome]
+name=google-chrome - \$basearch
+baseurl=http://dl.google.com/linux/chrome/rpm/stable/\$basearch
+enabled=1
+gpgcheck=1
+gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+EOF
+\end{verbatim}		
+		
+	\end{itemize}
+			
+
+
+
+
+
+
+
+

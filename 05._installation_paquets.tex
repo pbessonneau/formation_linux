@@ -1,0 +1,292 @@
+\input{header}
+
+\subtitle{La gestion de paquets}
+
+
+\newcommand{\hreff}[2]{\underline{\href{#1}{#2}\xspace}}
+
+\begin{document}
+
+\begin{frame}
+	\maketitle
+\end{frame}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+% Begin document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{La gestion de paquets}
+
+\subsection{Introduction}
+
+\begin{frame}[containsverbatim]
+  \frametitle{En avance sur tout le monde\dots}
+
+	  Les paquets sous \GNULinux sont incontournables. Ce sont des fichiers qui contiennent des logiciels avec les instructions d'installation.
+		
+		Toutes les distributions ont des dépôts qui regroupent de quelques paquets à quelques milliers. Ils sont généralement restreints à des logiciels open source.
+		
+		Ils sont finalement en avance sur les kiosque de logiciels qu'ont mis en place Apple et Windows ces dernières années.
+				
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{La diversité des formats}
+
+	  Les paquets sous \GNULinux sont aussi une source de conflit car selon la distribution originale le format des paquets est différents.
+		
+		Par exemple des rpm sous Fedora, des deb sous Debian, \dots Ils changent car les instructions d'installations sont différentes et que le binaire est différent (par exemple les versions des librairies sont différentes).
+		
+		D'autres distributions comme \emph{Gentoo} installent des paquets sources, i.e. qu'il faut compiler les logiciels à l'installation comme sous BSD.
+				
+\end{frame}
+
+\subsection{Gestion des dépots}
+\begin{frame}[containsverbatim]
+  \frametitle{Notion de dépots}
+
+	Le dépots est un serveur en ligne qui contient des paquets pour votre distribution.
+	
+	Ces paquets sont signés c'est-à-dire qu'un code unique permet de vérifier à la fois l'authenticité et la qualité du téléchargement.
+	
+	Quand on ajoute un dépot, il faut ajouter la clef du dépot pour télécharger et installer les paquets sinon le système va soit vous avertir soit bloquer l'installation des paquets provenant de ce dépot.
+
+	Pour ajouter des dépots, il faut l'ajouter dans le répertoire \emph{/etc/apt/sources.d/} pour Debian/Ubuntu soit dans \emph{/etc/yum.repos.d/} pour Fedora.
+				
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Notion de dépots}
+
+Syntaxe de Fedora pour ajouter un paquet~:
+
+\begin{verbatim}
+[nom-du-depôt]
+name=Le nom du dépôt $releasever - $basearch
+baseurl=http://adresse-du-dépôt.com/fedora/$releasever/$basearch/
+mirrorlist=http://adresse-du-miroire.com/fedora/$releasever/
+enabled=1
+gpgcheck=1
+gpgkey=http://adresse-de-la-clés-gpg/RPM-GPG-KEY-nomdudépôt
+\end{verbatim}
+				
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Notion de dépots}
+
+	Sur cet exemple d'un dépot Fedora qu'il y a trois composants~:
+	\begin{itemize}
+		\item l'url du serveur
+		\item le numéro de version
+		\item la clef d'authentification des paquets
+	\end{itemize}
+
+	Dans le cas de Debian, la gestion de la clef est déporté dans l'utilitaire \emph{apt-key}.
+				
+\end{frame}
+
+\subsection{Gestion des paquets en ligne de commande}
+\begin{frame}[containsverbatim]
+  \frametitle{Ajout d'une clef sous Debian/Ubuntu}
+	
+	Sous Ubuntu~:
+\begin{verbatim}
+wget http://www.dotdeb.org/dotdeb.gpg
+sudo apt-key add dotdeb.gpg
+\end{verbatim}	
+
+	La clef est téléchargé puis \emph{apt-key} est utilisé pour ajouter la clef dans le trousseau des clefs des dépots.
+				
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Ajout d'un dépot sous Debian/Ubuntu}
+	
+	Il faut ajouter, de préférence dans \emph{/etc/apt/sources.d} une ligne~:
+	
+\begin{verbatim}
+deb   http://www.serveur.tld   <branche>   <sections> 
+\end{verbatim}	
+
+	La branche est le nom de la version et sections sont les répertoires du serveur dans lequel les paquets seront recherchés~: en effet sous Debian/Ubuntu,
+	
+	Les sections définissent des catégories de paquets par exemple selon leur licence~: \emph{main} pour les paquets libres et \emph{restricted} pour les paquets non libres.
+					
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Ajout d'un paquet}
+
+	Le mieux est de connaître le nom du paquet à installer. Dans ce cas la syntaxe est pour Debian~:
+	\begin{verbatim}
+apt-get install nom_du_paquet	
+	\end{verbatim}
+	
+	Pour Fedora~:
+	\begin{verbatim}
+dnf install nom_du_paquet	
+	\end{verbatim}
+					
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Recherche d'un paquet}
+
+	Pour trouver le nom d'un paquet, il y a des fonctions particulières pour les chercher dans les dépots~:
+	
+	Sous Debian~:
+\begin{verbatim}
+apt-search kernel
+\end{verbatim}	
+
+	Sous Fedora~:
+\begin{verbatim}
+dnf list "kernel*"
+\end{verbatim}					
+
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Recherche d'un paquet}
+
+	Pour trouver le nom d'un paquet, il y a des fonctions particulières pour les chercher dans les dépots~:
+	
+	Sous Debian~:
+\begin{verbatim}
+apt-cache search kernel
+\end{verbatim}	
+
+	Sous Fedora~:
+\begin{verbatim}
+dnf list "kernel*"
+\end{verbatim}					
+
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Recherche d'un paquet}
+
+	Il y a aussi le site \href{https://alternativeto.net/}{alternativeto} qui est très utile.
+	
+	Si vous connaissez le nom d'un logiciel proche, il affiche la liste des programmes référencés qui font la même chose.
+		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Que faire avec un .deb ou un .rpm ?}
+
+	Dans le cas précédent, \emph{apt-get} ou \emph{dnf} vont télécharger le paquet puis l'installer.
+	
+	Parfois, par exemple quand le paquet n'est pas dans un dépot, il faut installer un paquet sans le télécharger.
+	
+	Dans ce cas l'utilitaire est \emph{dpkg} pour Debian et \emph{rpm} pour Fedora.
+				
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Que faire avec un .deb ou un .rpm ?}
+
+	L'utilisation est très simple, puisque qu'il suffit de faire~:
+	
+\begin{verbatim}
+dpkg -i fichier_du_paquet
+\end{verbatim}
+	
+ou sous Fedora
+\begin{verbatim}
+rpm -i fichier_du_paquet
+\end{verbatim}	
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Quand ça se passe mal sous Debian/Ubuntu\dots}
+
+	\emph{dpkg} est utile à connaître quand par exemple l'installation est interrompu.
+	
+	La commande \emph{dpkg --configure -a} permet de finir dee configurer tous les paquets en attente.
+	
+	On peut même forcer la configuration même en cas d'erreur ce qui n'est toutefois pas conseillé.
+
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{L'entretien d'un système\dots}
+	
+	La gestion des paquets inclut le fait qu'au fil de l'eau certains paquets ne sont plus nécessaires.
+	
+	Il faut alors nettoyer un peu avec~:
+	\begin{verbatim}
+apt-get autoremove
+dnf autoremove	
+	\end{verbatim}
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{L'entretien d'un système\dots}
+	
+	Dans le cas précédent on enlève les paquets obsolètes. C'est le cas du kernel sur les Ubuntu/Debian qui sont une plaie.
+	
+	Souvent on se retrouve avec 20 kernel installés si on ne fait pas \emph{autoremove}. C'est parce que le paquet \emph{linux-image} pointe
+	vers une version précise du kernel qui change au fil du temps. Ainsi le paquet installé deveint obsolète car il n'est plus pointé
+	par linux-image. Debian/Ubuntu le signale dans ce genre de cas.
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{L'entretien d'un système\dots}
+	
+	Le cas précédent diffère de la recherche des paquets orphelins. Un paquet orphelins est un paquet qui n'est relié à aucun autre.
+	
+	C'est le cas par exemple d'une librairie qui n'est pas supprimée quand on supprime un logiciel qui utilisait cette librairie et qu'il
+	était le seul à l'utiliser.
+	
+	Quand on change de versions, les orphelins sont nettoyés (la dernière étape de l'installation, \emph{Nettoyage}) mais vous pouvez demander à le faire
+	vous même. 
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{L'entretien d'un système\dots}
+
+Debian/Ubuntu
+\begin{verbatim}
+	deborphan --guess-all
+\end{verbatim}	
+
+Fedora
+\begin{verbatim}
+package-cleanup --quiet --leaves
+\end{verbatim}
+	
+\end{frame}
+
+\subsection{Gestion des paquets au format graphique}
+\begin{frame}[containsverbatim]
+  \frametitle{Utilitaires graphiques}
+	
+	Il y a un utilitaire très pratique, \emph{synaptic} qui permet la gestion avancée des paquets.
+				
+	L'utilitaire le plus ressemblant est \emph{yumex-dnf} pour Fedora.
+		
+\end{frame}
+
+\subsection{Les versions}
+\begin{frame}[containsverbatim]
+  \frametitle{Différence entre les distributions usuelles et \emph{ArchLinux}}
+
+					
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Retrouver sa version}
+	
+					
+\end{frame}
+
+
+\end{document}

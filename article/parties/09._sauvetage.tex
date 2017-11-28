@@ -1,0 +1,87 @@
+\section{Réparation}
+
+  \subsection{Utilitaire Live CDs}
+ 
+ Pour la plupart des distributions, il y a des live CDs qui vont vous permettre en mode graphique ou en ligne de commande sauvez votre installation.
+ 
+ Il y a même des des distributions dédiées comme \href{http://distrowatch.com/search.php?category=Data+Rescue}{ici}.
+ 
+ Attention la liste contient aussi des distributions de \emph{forensics} pour étudier un disque après une intrusion (Kali, Backbox).
+ 
+  
+
+  \subsection{Montage}
+ 
+ Le type de problème fréquent est d'altérer /etc/fstab et ça empêche le système de booter.
+ 
+ Il suffit d'appliquer ce que vous avez appris. 
+ 
+ Il faut identifier votre disque avec la commande \emph{sudo blkid} et/ou \emph{fdisk -l}
+ 
+ 
+
+
+ 
+ \begin{verbatim}
+ sudo mkdir /media/crash
+ sudo mount /dev/sdX /media/crash
+ sudo nano /media/crash/etc/fstab
+ \end{verbatim}
+  
+  
+
+  \subsection{Corruption d'un disque}
+
+ Sauf très gros problème, vous pouvez lors du démarage accéder à la console pour réparer une parititon défecteuse.
+ 
+ Mais si vous voulez corriger une partition défectueuse vous pouvez le faire avec la commande~:
+ \begin{verbatim}
+ sudo e2fsck /dev/sdX
+ \end{verbatim}
+ 
+ \textcolor{red}{Attention !!! la partition ne doit pas être montée pour le faire} 
+ 
+ 
+
+\emph{e2fsck} détecte le type de partition et tente de réparer le disque.
+
+  Si \emph{e2fsck} ne détecte pas le type de partition là, soit vous vous êtes trompé en spécifiant la partition soit elle est très abimée et sera éventuellement récupérable en forçant 
+  
+  \emph{e2fsck.ext4},  \emph{e2fsck.ext3}, \dots
+  
+  La récupération des disques Windows (fat, ntfs) est un problème sous Linux car elle ne marche pas très bien et vous demande souvent de faire la réparation sous\dots Windows.
+  
+
+
+  \subsection{Grub}
+
+Si l'ordinateur ne démarre pas du tout hors matériel c'est potentiellement grub qui pose problème. Dans ce il faut réparer grub.
+
+La solution c'est le chroot. Cet utilitaire va faire croire au système que la racine est différente et vous pourrez faire fonctionner comme si vous aviez booter sur le sytème altéré. 
+ 
+C'est-à-dire que si vous voulez accéder à /mnt/t1/boot/grub.cfg, vous le ferez en accédant directement par /boot/grub.cfg une fois chrooté.  
+  
+
+
+Il faut monter la partition par exemple dans le répertoire /mnt/t1 puis~:
+\begin{verbatim}
+mount /dev/sda1 /mnt/t1
+mount --bind /run  /mnt/t1/run
+mount --bind /dev /mnt/t1/dev
+mount --bind /dev/pts /mnt/t1/dev/pts
+mount -t proc /proc /mnt/t1/proc
+mount -t sysfs /sys /mnt/t1/system/sys
+chroot /mnt/t1 /bin/bash
+\end{verbatim} 
+  
+
+
+une fois chrooté il suffira d'un~:
+\begin{verbatim}
+sudo update-grub
+\end{verbatim} 
+  
+
+
+
+

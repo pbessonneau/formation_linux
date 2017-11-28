@@ -1,0 +1,103 @@
+\section{La théorie}
+
+  \subsection{Les systèmes \GNULinux}
+
+	Le propos sera simplifié et pourra choquer des spécialistes. Les processus et leur gestion est un sujet complexe.
+	
+	Un processus est par exemple quand vous lancez une application. Elle possède son petit bout de mémoire propre, des informations comme le répertoire où vous l'avez lancé, le droit d'avoir un certain temps d'utilisation du CPU, \dots
+	
+	Sous \GNULinux, un processus  (une application au sens large) est toujours le fils d'un autre processus. Ainsi à chaque boot, le premier processus va se multiplier à chaque que nécessaire avec des infos et des droits adaptés.
+
+
+
+
+
+	Cette hiérarchie peut être vu avec la commande \emph{pstree}.
+
+
+
+
+  \subsection{Au quotidien}
+
+	Les élements importants à savoir au quotidien est principalement que chaque processus se voit affecter des droits (par exemple root, ou pascal ou gaston) et qu'il a un numéro unique qui l'identifie.
+
+	Identifier les droits avec lequel est lancé le processus est important car cela conditionne ce qu'on pourra faire au sein du processus.
+	
+	C'est la raison pour laquelle on utilise \emph{sudo}. On laisse en utilisant cette commande le processus en tant que root.
+
+
+\section{Les signaux}
+  \subsection{Les systèmes \GNULinux}
+
+	Un processus peut recevoir des signaux venant du noyau. Les signaux sont, en grande partie, la forme de communication pour gérer les processus.
+	
+	Nous verrons ici les ordres envoyés aux processus par le noyau~: ceux qui nous intéressent sont ceux qui vont gérer l'arrêt et le redémarrage des processus.
+	
+	Ainsi les signaux à mémoriser sont~:
+	\begin{description}
+		\item[TERM (15)] pour dire à l'application de se fermer
+		\item[KILL (9)] pour tuer l'application 
+		\item[HUP  (1)] pour redémarrer l'application (par exemple un serveur pour qu'il relise ses fichiers de configurations)
+	\end{description}
+	
+
+  \subsection{Au quotidien}
+
+	Le numéro de processus va permettre par exemple s'il se bloque de l'arrêter ou de le tuer en utilisant une commande et le numéro du processus.
+	
+	Oui sous \GNULinux on tue des processus, c'est cruel.
+	
+
+\section{En mode graphique}
+
+  \subsection{Terminal/Console}
+	
+	\begin{description}
+		\item[GNOME]\emph{Moniteur Système}.
+		\item[KDE] \emph{KDE System Guard} dans Système.
+	\end{description}
+	
+
+\section{En mode console}
+
+  \subsection{Au quotidien}
+
+	C'est la version simple. Si votre processus a un nom unique, la commande permet de tuer les processus. Par exemple pour stopper le navigateur Firefox vous pouvez taper~:
+	\begin{verbatim} 
+	pkill firefox
+	\end{verbatim}
+	
+	S'il ne répond pas du tout vous pouvez le tuer~:
+	\begin{verbatim} 
+	pkill -9 firefox
+	\end{verbatim}
+	
+
+
+
+\begin{verbatim}
+pascal   31945  105  5.6 9244360 903364 ?      Sl   19:32   0:23 /usr/lib/firefox/firefox
+pascal   32073  0.0  0.0  14376  1088 pts/0    S+   19:33   0:00 grep --color=auto firefox
+\end{verbatim}	
+
+on voit que Firefox est le processus 31945 et qu'il est en sommeil.
+	
+
+
+	Pour le stopper, \emph{kill 31945} ou le tuer \emph{kill -9 31945}.
+
+	Vous pouvez visualiser les tâches en arborescence avec ps à l'aide de cette commande~: \emph{ps aux -ejHu}
+		
+
+
+	Il y a aussi l'utilitaire \emph{top} il permet d'afficher en temps (presque) réel les processus actifs.
+
+	Vous pouvez classer différemment en utilisant les touches~:
+	\begin{itemize}
+		\item[F] trie selon une colonnes différentes
+		\item[u] n'affiche que cet utilisateur
+		\item[k] stoppe un processus
+		\item[q] quitter \emph{top}
+	\end{itemize}
+
+

@@ -1,0 +1,447 @@
+\section{Les dossiers personnels}
+
+  \subsection{Le home directory \GNULinux}
+
+	  Les arborescences de fichiers \GNULinux sont souvent source de confusion.
+		
+		Pourtant ils ne sont on ne peux plus simple\dots
+		
+		Votre \emph{home directory} ou répertoire personnel est dans le répertoire \emph{/home/utilisateur} avec utilisateur votre login. 
+
+		Vous y passerez la quasi totalité de votre temps.
+
+		Ce répertoire s'appelle aussi \textasciitilde pour le répertoire de l'utilisateur actif. On peux écrire pour les utilisateurs \textasciitilde utilisateur.
+
+
+
+		Tous les utilisateurs sont dans la même situation sauf le super utilisateur (ou root).
+
+
+  \subsection{Les périphériques amovibles}
+
+		Quand vous montez une clef usb par contre (ou un CD), le système ne va pas la monter dans votre répertoire personnel.
+		
+		Il va la monter dans le répertoire \emph{/media/utilisateur/nom de la clef}. Les distributions plus vieilles montent 
+		dans le répertoire \emph{/mnt/}.
+		
+		Par monter, on entends rendre possible l'accès du périphérique à l'utilisateur.
+
+
+\section{Montage et démontage}
+
+  \subsection{Montage et démontage}
+
+	On a parlé de montage et démontage~:
+	\begin{enumerate}
+		\item quand on branche un périphérique, il est réconnu par le système d'exploitation mais pas accessible par l'utilisateur
+		\item il faut lui affecter un répertoire (et son type de format) pour qu'il soit accessible
+		\item cette opération se fait par la commande \emph{mount}. Elle nécessite parfois d'être le super-utilisateur
+	\end{enumerate}
+		
+
+
+Par exemple pour monter une clef \og~à la main~\fg~:
+\begin{verbatim}
+mount -t vfat /dev/sdg /home/pascal/clef
+\end{verbatim}
+		
+		Les deux élements les plus importants sont~:
+		\begin{enumerate}
+			\item /dev/sdg~: c'est la référence vers le matériel ici une partition
+			\item /home/pascal/clef~: c'est le répertoire dans lequel le contenu de la clef est visible. Attention si il y a des choses dans ce répertoire, ces élements sont "`masqués"' tant que la clef est monté.
+		\end{enumerate}
+		
+
+\subsection{Ajouter le montage d'un disque au démarrage}
+  \subsection{Avoir l'UUID}
+
+	Il faut pour ça utiliser avec sudo l'utilitaire \emph{blkid}~:
+
+\begin{verbatim}
+/dev/sda1: UUID="8bf33340-e94c-..." TYPE="ext4" 
+/dev/sda2: UUID="ac56a704-260b-..." TYPE="swap" 
+/dev/sda3: LABEL="Home" UUID="8244710a-5cce-49ad-8b93-a92b5d2e53a0" TYPE="ext4" 
+/dev/sda4: UUID="DCF041AFF0419126" TYPE="ntfs" 
+\end{verbatim}
+
+
+
+	Cette commande permet donc d'avoir l'UUID et d'identifier les disques et le type de format.
+	
+	L'UUID est un identifiant unique qui, sauf formatage, restera identique \og~à vie~\fg.
+	
+	Si on utilise le nom du périphérique, par exemple /dev/sda1, pour identifier un disque plutôt que le numéro unique, 
+	en cas de changement de configuration, le nom de pérphérique risque de changer contrairement à l'UUID.
+
+	
+
+
+\subsection{Gestion des disques en mode graphique}
+  \subsection{Sous GNOME 3}
+	
+	Il y a un utilitaire \emph{Disques}.
+	
+	
+
+\subsection{Gestion des disques en mode graphique}
+  \subsection{Sous GNOME 3}
+	
+	Il y a un utilitaire \emph{Disques}.
+		
+
+	
+	\begin{center}
+	\begin{figure}
+	\includegraphics[scale=0.25]{Figures/Selection002}
+	\caption{Disques sous GNOME}
+	\end{figure}
+	\end{center}
+	
+
+	
+	\begin{center}
+	\begin{figure}
+	\includegraphics[scale=0.25]{Figures/Selection003}
+	\caption{Disques sous GNOME}
+	\end{figure}
+	\end{center}
+	
+
+\subsection{Ajouter le montage d'un disque au démarrage}
+  \subsection{/etc/fstab}
+
+	Comme on a vu précedemment, on utilise l'UUID dans ce fichier de configuration plutôt que le nom de périphérique.
+
+\begin{verbatim}
+UUID=c3cc32c0-b4bd-... /boot ext2 defaults 0 2
+\end{verbatim}
+		
+
+
+	Attention, au démarrage, le système risque de se bloquer si le disque est marqué comme à monter par défaut
+	et qu'il n'est pas présent. Avant d'enlever un disque penser à commenter la ligne (ou la supprimer) avant le 
+	redémarrage.
+
+\begin{verbatim}
+UUID=c3cc32c0-b4bd-... /boot ext2 defaults 0 2
+\end{verbatim}
+		
+
+	
+	Les arguments sont~:
+
+	\begin{enumerate}
+		\item l'identifiant ou le nom du périphérique
+		\item le point de montage
+		\item le type de la partition
+		\item des mots clefs pour changer les propriétés du disque
+		\item le \emph{dump}, utilisé pour les sauvegardes
+		\item le \emph{pass}, pour les vérifications on démarrage
+	\end{enumerate}
+	
+
+	
+	Parmi les mots-clefs à connaître~:
+
+	\begin{description}
+		\item [user, no user] définit si un utilisateur (et pas seulement le root) a le droit de monter la partition
+		\item [auto,noauto] définit si la partition est montée automatiquement au démarrage et en faisant \emph{mount -a}
+		\item [atime/noatime] définit si le système marque la date de dernier accès. Il faut le mettre de préférence à \emph{noatime} pour les SSD
+		\item [rw/ro] montage en lecture/écriture ou lecture seule (read only)
+		\item [uid,gid,\dots] permet de spécifier les droits des fichiers du disque
+	\end{description}
+	
+
+
+	Pour le \emph{dump}, il faut le laisser à 0. 
+	
+	Pour le \emph{pass}, les valeurs sont à indiquer sont les suivantes~:
+	
+	\begin{enumerate}
+		\item pour la racine
+		\item pour les autres partitions Linux
+		\item pour le swap et les partitions windows
+	\end{enumerate}
+	
+	Plus d'infos \href{https://doc.ubuntu-fr.org/mount_fstab}{là}
+	
+	
+
+  \subsection{/etc/mtab}
+	
+	
+
+\section{Les autres répertoires}
+
+\subsection{Les devices}
+
+  \subsection{Le répertoire /dev/}
+
+	Il y a un dicton qui dit que tout dans \GNULinux est fichier.
+	
+	Ce qui traduit l'existence du répertoire \emph{/dev/}. A une entrée dans ce répertoire correspond un matériel ou une fonctionnalité du noyau.
+	
+	Par exemple avec la commande \emph{sudo blkid} vous pouvez voir les répertoires \emph{/dev/} correspondant aux disques.
+	
+	Un autre exemple est \emph{/dev/urandom} qui contient des données aléatoires générées par le noyau.
+	
+	\begin{verbatim}
+dd bs=4M count=1 if=/dev/urandom of=random.txt
+	\end{verbatim}
+
+
+
+	Les fichiers respectent des nomenclatures. Par exemple, \emph{sdX} designe un disque SCSI (historiquement).
+	
+	\emph{/dev/sdg} désigne le disque tout entier, \emph{/dev/sdg1} la partition 1 du disque sdg.
+	
+	Un utilitaire en ligne de commande pour explorer les disques est \emph{fdisk} ou plus récent \emph{parted}.
+	
+	Graphiquement utiliser \emph{gparted}.
+
+
+\subsection{Les autres répertoires}
+
+  \subsection{Les principaux répertoire\dots}
+	
+	\begin{itemize}
+		\item /bin, la plupart des programmes en ligne de commande
+		\item /dev, pointe vers les pérphériques
+		\item /etc, Contient les fichiers de configuration du système
+		\item /lib, les librairies
+		\item /tmp, pour les répertoires temporaires
+		\item /usr, là où s'installe la plupart des programmes
+		\item /var, contient les informations partagée (par exemple site web, logs, \dots)
+	\end{itemize}
+
+	La liste complète est \href{https://www.dell.com/support/article/fr/fr/frbsdt1/sln152018/the-types-and-definitions-of-ubuntu-linux-partitions-and-directories-explained?lang=en#FileSystem}{là}.
+
+
+  \subsection{/bin}
+
+	Dans ce répertoire on trouve les binaires c'est-à-dire les programmes exécutables.
+	
+	Vous pouvez également trouver des exécutables dans les répertoires \emph{/usr/share/bin} et \emph{/usr/local/bin}.
+	
+	La disposition des exécutables dépend de la distribution et du type d'exécutables.
+
+
+  \subsection{/etc}
+
+	Si vous voulez modifier la configuration système, il est probable que vous ayez à intervenir dans ce répertoire.
+	
+	Les fichiers sont presque tous des fichiers texte qu'il suffit d'éditer en tant que super utilisateur.
+
+
+  \subsection{/lib}
+
+	C'est le répertoire dans lequel on trouve les librairies c'est-à-dire des \og~morceaux~\fg de programme qui sont mis dans le pot commun pour plusieurs programmes.
+
+
+
+
+  \subsection{/tmp}
+
+	Dans ce répertoire on trouve tous les fichiers qui sont destinés à avoir une durée de vie courte. D'ailleurs sur la plupart des distributions, le répertoire est vidé quand le système démarre.
+
+
+  \subsection{/usr}
+
+	Dans ce répertoire on trouve pas mal de choses. Il y a aussi des exécutables des librairies, l'emplacement de tout ça est régi par des règles dépendant de la distributions et de l'histoire de \GNULinux. 
+
+	Dans ce répertoire on trouve surtout les exécutables qui sont lancés en mode graphique.
+
+
+  \subsection{/var}
+
+	Ce répertoire est important notamment car vous trouverez par exemple deux répertoires très précieux~:
+	\begin{itemize}
+		\item /var/www, le contenu de votre site web
+		\item /var/logs, les fichiers journaux qui stockent les évènements qui se produisent sur le poste.
+	\end{itemize}
+
+
+
+	La \href{https://www.dell.com/support/article/fr/fr/frbsdt1/sln152018/the-types-and-definitions-of-ubuntu-linux-partitions-and-directories-explained?lang=en}{page} est 
+	assez exhaustive.
+	
+		Elle contient pas d'informations intéressantes.
+
+
+\section{Les formats de partition}
+
+  \subsection{Les formats extX}
+
+	Particularité des systèmes de fichier
+	
+	sortie de fdisk -l
+
+
+
+\begin{verbatim}
+file -sL /dev/sd*
+\end{verbatim}
+
+
+
+	\begin{description}
+		\item[ext2] c'est le format standard UNIX qui n'est plus au goût du jour
+		\item[ext3] il reprend le format ext2 avec une journalisation
+		\item[ext4] il reprend ext3 avec en plus une augmentation de la taille des disques
+	\end{description}
+	
+	A l'heure actuelle, il faut préférer le format le plus récent ext4.
+	
+
+
+  \subsection{Les formats Windows}
+
+	Si vous voulez monter des disques Windows~:
+
+	\begin{description}
+		\item[FAT,FAT32] c'est le vieux format qu'on retrouve sur les clefs USB notamment. Il est compatible \Linux, Mac OS et Windows
+		\item[NTFS] c'est le \og~nouveau~\fg format de Windows qui est propriétaire
+	\end{description}
+	
+	Avant \Linux ne pouvait écrire que sur des partitions FAT mais maintenant il peut aussi écrire sur des partitions NTFS dans la plupart des distros 
+	(mais pas toutes!).
+	
+
+
+	Il y a d'autres types de partitions proposées~: reiserfs, xfs, zfs, \dots
+	
+	Il ne se sont pas installés et/ou sont propriétaires donc ne sont pas lus par toutes les distributions.
+	
+
+
+
+\subsection{gparted}
+
+
+\section{Les permissions}
+
+\subsection{permission}
+
+  \subsection{les sorties d'un ls}
+  
+  \begin{verbatim}
+  -rw-r--r-- 1 root root 1426 nov.  26  2016 debug
+-rw-r--r-- 1 root root 1735 nov.  26  2016 dhclient.conf
+drwxr-xr-x 2 root root 4096 nov.   1 12:29 dhclient-enter-hooks.d
+drwxr-xr-x 2 root root 4096 nov.   1 12:29 dhclient-exit-hooks.d
+  \end{verbatim}
+  
+
+
+Les premiers caractères sont les droits pour le propriétaire et le groupe attribué au fichier ou au répertoire~:
+\begin{description}
+	\item[d] directory ou répertoire.  
+	\item[r] on peut lire le fichier
+	\item[w]on peut écrire le fichier
+	\item[x] le fichier est exécutable ou le répertoire peut être traversé
+\end{description}
+  
+  si au lieu d'un de ces caractères est remplacé par un - alors la propriété est inversé : si au lieu d'un w on a  -, alors on ne peut pas écrire dans le fichier.
+  
+		
+  \subsection{Les différents utilisateurs}
+
+On peut voir que le trio rwx est répété trois fois.
+
+Car il y a trois types d'utilisateurs~:
+\begin{enumerate}
+	\item le propriétaire du fichier ou \emph{u(ser)}
+	\item un membre du groupe auquel est attaché le fichier ou \emph{g(roup)}
+	\item tous les autres utilisateurs ou emph{o(thers)}
+\end{enumerate}
+  
+
+
+  \subsection{Dans l'explorateur de fichier}
+
+Avec un clic droit sur le fichier on peut changer avec nautilus ou dolphin, changer les droits~: il suffit de choisir \emph{Propriétés} puis \emph{Permissions}.
+
+En ligne de commande vous avez chmod. Il y a plusieurs utilisations de chmod.
+  
+
+  \subsection{Utilisation simple de chmod}
+
+par exemple pour changer les propriétés d'un fichier, il faut faire~:
+\begin{verbatim}
+chmod ug+rwx fichier
+\end{verbatim}
+  
+  cette commande permet de rendre lisible et en écriture \emph{fichier}.
+  
+  L'inconvénient est que la syntaxe ne permet de ne changer que par différence les permissions.
+  
+
+
+
+  \subsection{Masque}
+
+	Au lieu de modifier les permissions de façon relative, elle définisse les droits mais sont 
+moins intuitifs. A chaque catégorie rwx, est assigné un numéro et la somme définie les droits du fichiers.
+
+\begin{description}  
+	\item[1] exécution
+	\item[2] écriture autorisée
+	\item[4] lecture autorisée 
+\end{description}
+
+En combinant les sommes de chacun de ces chiffres on obtient tous les combinaisons de droits.
+
+
+
+Ex~: \emph{chmod 754 fichier}
+\begin{description}  
+	\item[7=] $4+3+1$, tous les droits sont données
+	\item[5=] $4+1$, lecture et exécution
+	\item[4=] $4$, lecture autorisée 
+\end{description}
+
+et ainsi de suite.
+
+
+
+  \subsection{Récursif}
+  
+ Pour changer les droits de tout un répertoire et ses sous répertoires, il suffit de faire
+ \emph{chmod 700 -R repertoire} 
+
+Attention, changer les droits des fichiers doit être fait de façon très prudente car il est diffcile après une erreur de retrouver les droits de tous les fichiers d'une arborescence.
+
+Et parfois le système peut être bloqué pour des problèmes de droit.
+
+Par exemple, vous bloquerez la mise à jour des fichiers de log si vous en changez les droits.
+
+
+  \subsection{Utilisateur et groupe}
+ 
+ il y a deux commandes ~:
+ \begin{description}
+ 	\item[chown pascal fichier] change le propriétaire de fichier pour pascal
+ 	\item[chown pascal:pascal fichier] change le propriétaire de fichier pour pascal et le groupe pour pascal
+ 	\item[chgrp pascal fichier] change le propriétaire de fichier pour pascal et le groupe pour pascal
+  \end{description}
+  
+  
+
+\section{Utilitaires}
+  \subsection{Utilitaires}
+  
+  Il y a quelque utilitaires qui n'ont pas d'équivalent en mode graphique.
+  
+  Le premier est \emph{df} qui permet d'avoir la place libre sur les disques.
+  
+  Il faut le lancer avec l'argument \emph{df -h} pour avoir l'espace en unités intelligible.
+  
+  Il y a aussi la commande \emph{du -ch} qui permet d'avoir l'espace disque pris par des répertoires.
+  
+Sous GNOME, un utilitaire peu efficace qui tente de les remplacer~: \emph{Analyseur d'utilisation de disques}
+  
+
+
+
+
+

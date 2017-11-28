@@ -1,0 +1,69 @@
+\input{header}
+
+\subtitle{Réseau}
+
+
+\newcommand{\hreff}[2]{\underline{\href{#1}{#2}\xspace}}
+
+\begin{document}
+
+\begin{frame}
+	\maketitle
+\end{frame}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+% Begin document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% tail head less more cat
+
+\section{Réseau}
+
+\subsection{Déboguer un réseau}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Je n'ai pas de connexion du tout}
+		
+	Si vous faites un \emph{ifconfig} et que l'interface réseau ethernet (enX ou ethX) n'apparait pas\dots
+	
+	Votre controleur réseau n'est pas reconnue par \GNULinux. Dans ce cas il faut regarder sur Internet comment l'activer
+	pour \GNULinux. Ca peut être compliqué.
+	
+	Généralement il faut télécharger le firmware ou charger le bon module du noyau.
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Je n'ai pas de connexion du tout}
+		
+	Si vous faites un \emph{ifconfig} une adresse internet n'est pas assignée\dots
+	
+	Dans ce cas, il est probable que ce soit un cable ou que la box ne joue pas son rôle de DHCP. Le réseau est indisponible.
+	
+	Essayer de jouer avec les cables, rebooter votre box, \dots
+		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Je n'ai pas de connexion du tout}
+		
+	Si vous faites un \emph{ifconfig} une adresse internet n'est assignée\dots
+	
+	La box joue son rôle de DHCP. Le réseau est disponible. Essayer de faire \emph{ping 208.118.235.174}. \emph{208.118.235.174} est 
+	le serveur de la Free Software Foundation qui répond au ping sauf cataclysme.
+	
+	Si vous obtenez une réponse alors c'est surement le serveur DNS qui est mal configuré si vous avez 
+	un serveur DNS privé ou vous avez un peu trop joué avec les réglages de resolv.conf ou un problème
+	de pare-feu mal configuré sur la box ou votre routeur.
+	
+	Si vous n'avez pas de réponse au \emph{ping} alors vous n'êtes pas connecté à internet. Dans ce cas
+	c'est souvent un problème	de pare-feu mal configuré sur la box ou votre routeur.
+	
+	Autre possibilité si tout parait au vert mais que vous n'avez pas accès au web, vérifier les réglages Proxy de votre navigateur.
+	
+\end{frame}
+
+
+\end{document}

@@ -1,0 +1,137 @@
+\input{header}
+
+\subtitle{Utilisateurs}
+
+
+\newcommand{\hreff}[2]{\underline{\href{#1}{#2}\xspace}}
+
+\begin{document}
+
+\begin{frame}
+	\maketitle
+\end{frame}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+% Begin document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Qu'est ce qu'un utilisateur ?}
+	
+	C'est un compte permettant généralement une connexion (graphique ou console).
+	
+	Il est associé sous UNIX à un numéro qui est utilisé pour identifier les fichier et les répertoires
+	
+	Il est généralement associé à la présence d'un répertoire utilisateur qui lui appartient.
+
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Qu'est ce qu'un utilisateur ?}
+
+	Il existe des utilisateurs spéciaux qui n'ont pas de répertoire et/ou la connexion n'est pas possible.
+	
+	C'est le cas pour de nombreux serveurs qui fonctionnent ainsi pour des raisons de sécurité.
+	
+\end{frame}
+
+\section{Gestion des utilisateurs}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Créer/supprimer un utilisateur}
+
+	Pour créer un utilisateur, il suffit d'utiliser la commande \emph{adduser <utilisateur>} précédé de \emph{sudo}.
+	
+	Et après il faut répondre aux questions, relativement simple.
+	
+	En effet la gestion des utilisateurs est réservé au super utilisateur.
+
+	Pour supprimer un utilisateur, il faut utiliser \emph{deluser <utilisateur>} et de répondre aux questions.
+		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Les fichiers de référence}
+	
+	Le fichier des utilisateurs est le fichier /etc/passwd.
+	
+	Le fichier des groupes est le fichier /etc/group.
+	
+	Le fichier des groupes est plus intéressant car il permet de voir quels groupes contiennent quels utilisateurs.
+	C'est utile par exemple pour copier les droits de l'utilisateur créé par défaut par votre distribution.
+
+	\textcolor{red}{Mais il faut éviter de manipuler directement ces fichiers car s'ils sont corrompus le système d'authentification peut planter}
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Gestion des groupes}
+	
+	Pour ajouter un groupe à un utilisateur, il faut utiliser la commande~:
+	\emph{usermod -a -G <groupe> <utilisateur>}.
+	
+	Pour ajouter un groupe à un utilisateur, il faut utiliser la commande~:
+	\emph{gpasswd -d <utilisateur> <group>}.
+		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Nota bene}
+	
+	Les droits sont des numéros.
+	
+	Si l'utilisateur pascal est 1001 sur un ordinateur et 1002 sur un autre ordinateur, alors
+	si vous échangez les disques les fichiers ne seront pas reconnus comme pascal sur l'un
+	ou l'autre des ordinateurs.
+		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{En mode graphique}
+	
+	Sous KDE, l'utilitaire KUser permet de le faire graphiquement comme system-config-users sous GNOME.
+		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Sous GNOME 3}
+
+\begin{center}
+\begin{figure}
+ \includegraphics[scale=0.2]{Figures/Selection005}
+	\caption{Utilisateurs dans le menu Détails de l'application Paramètres}
+\end{figure}
+\end{center}
+  
+  \end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Sous GNOME 3}
+
+\begin{center}
+\begin{figure}
+ \includegraphics[scale=0.2]{Figures/Selection006}
+	\caption{Utilisateurs, déblocage avec le mot de passe}
+\end{figure}
+\end{center}
+  
+  \end{frame}
+
+
+\begin{frame}[containsverbatim]
+  \frametitle{Sous GNOME 3}
+
+\begin{center}
+\begin{figure}
+ \includegraphics[scale=0.2]{Figures/Selection007}
+	\caption{Utilisateurs, nouvel utilisateur}
+\end{figure}
+\end{center}
+  
+  \end{frame}
+
+	
+\end{document}

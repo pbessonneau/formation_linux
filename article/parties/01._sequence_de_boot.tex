@@ -1,0 +1,174 @@
+\section{Séquence de Boot}
+
+  \subsection{Recherche du software après le démarrage matériel}
+
+	  Le matériel va chercher le software qui est nécessaire pour booter~:
+	  \begin{itemize}
+	  	\item une partition bootable
+	  	\item une partition \textit{UEFI}
+	\end{itemize}
+
+
+
+
+  \subsection{Old school}
+	
+	la partition doit être bootable. Pour la rendre bootable il suffit d'utiliser \textit{gparted} ou \textit{fdisk} pour la rendre bootable.
+	
+	Sinon tous les installeurs le font d'eux-mêmes.
+	  
+
+  \subsection{UEFI}
+	
+	L'UEFI installé sur les ordinateurs complexifie le processus en demandant que le soft de démarrage soit signé ce qui peut poser des problèmes car \GNULinux.
+  	
+  	D'autre part il exige une partition en \text{FAT32} pour démarrer bien particulière et il faut une signature particulière répondant au doux nom de \textit{EF00}. Il faut également que la table des partitions soit au format \textit{gpt}.
+  	
+  	L'\textit{UEFI} est connu pour une bête noire pour la configuration sous \Linux. Les distributions mainstream gèrent maintenant l'\textit{UEFI}. Tant qu'on a que \Linux sur le poste. En cas de double boot, on commence à avoir des problèmes.
+  	
+
+
+	
+more...	
+	
+
+
+  \subsection{GRUB}
+  
+  Ensuite le démarrage va charger en mémoire le petit noyau \linux\dots
+  
+  le noyau par défaut est celui qui s'appelle vmlinuz à la racine /. En fait c'est un lien symbolique vers le noyau qui se trouve vraiment dans \textit{/boot}.
+  
+  \textit{GRUB} selon ses réglages peut démarrer sur un autre noyau. La configuration de \textit{GRUB} se fait en lançant \textit{update-grub}.
+
+
+  
+  La partie automatisée de \textit{GRUB} est situé dans le répertoire \emph{/boot/grub}. C'est là qu'on retrouve des scripts \textit{bash} qui vont construire le menu de démarrage et qui vont être appelé quand on fait \textit{update-grub}.
+  
+  Pour les modifications manuelles, il faut éditer le fichier \emph{40\_custom} dans \emph{/etc/grub.d} ou directement (plus simple) le fichier \emph{/etc/default/grub}.
+  	
+
+  
+Point sécurité~: il est possible avec les bons arguments de booter avec le menu \emph{démarage personnalisée} en mode single user, ie. en root (voir \href{https://askubuntu.com/questions/132965/how-do-i-boot-into-single-user-mode-from-grub}{ici})
+
+Pour ne pas le permettre il faut ajouter un mot de passe à taper avant d'accéder à cette personnalisation. 
+
+Vous trouverez la manipulation \href{https://help.ubuntu.com/community/Grub2/Passwords}{ici}. Elle se ressemble sur \Fedora et \Ubuntu.
+  	
+
+  \subsection{vmlinuz}
+  
+  Il s'appelle ainsi car il est compressé à une époque ou le programme ne devait pas dépasser une taille critique. D'ailleurs sur certains ordinateurs on étaient obligés de modifier (compiler soi même le noyau) pour qu'il rentre dans la taille spécifiée.
+  
+  En effet il y a dans \emph{vmlinuz} le système d'exploitation et et des ``modules''. Un module est un bout du noyau qui ajoute des fonctionnalités~: une interface pour un matériel particulier, la possibilité de lire un format de fichier, \dots
+  	
+
+  
+  Au démarrage dans \emph{GRUB}, on peut charger un module ou au contraire empêcher son chargement. 
+  
+  C'est utile par exemple à l'heure où j'écris ces lignes pour une installation avec la carte Nvidia pour \Fedora (pareil sous \Ubuntu) \href{ https://www.if-not-true-then-false.com/2015/fedora-nvidia-guide/}{ici}.
+  
+  Le principe des modules est qu'ils sont chargés à la demande du noyau et évite ainsi d'avoir un noyau énorme et qui serait moins performant (?).
+  
+
+
+  \subsection{init/system.d}
+  
+  A ce stade, nous sommes en pleine transition en deux logiciels pour continuer le démarrage, le système \emph{init} et le \emph{systemd}.
+  
+ Le système \emph{init} est en phase d'être abandonné au profit de l'autre. 
+ 
+ Dans la plupart des distributions vous pouvez constater leur travail en appuyant sur la touche \emph{ESC} de votre ordinateur. Vous verrez une ligne par service chargé.
+ 
+ Par service, il faut entendre qu'il va charger le support réseau, le support du matériel, \dots
+
+
+
+  \subsection{init/systemd}
+  
+  Sous \Fedora le systemd est presque complètement adopté. Sous Ubuntu c'est moins clair car ils ont essayé de lancer leur propre système de démarrage \emph{Upstart} qui n'a pas pris dans la communauté. Donc Ubuntu c'est un peu le f...
+  
+  Pour activer ou désactiver un service de systemd, il faut utiliser la commande \emph{sysctl}.
+  
+  Vous pouvez regarder \href{https://wiki.debian.org/fr/systemd}{là}. 
+  
+  Les différents services sont théoriquement dans le répertoire \emph{/etc/systemd/system}.
+  
+
+  \subsection{run.level}
+  
+  Pour gérer un service init, c'est les commandes~:
+  \begin{verbatim}
+  update-rc.d <nom du service> stop|start|enable|disable
+  \end{verbatim}
+  
+  Il faut parfois rajouter l'option \emph{-f} pour pour forcer la commande. Il vous le signale si c'est nécessaire.
+  
+
+  
+  Les \emph{run.levels} sont fondamental dans \Linux. Ils sont appelés aussi par l'appellation System V.
+  
+  Une machine \Linux est toujours dans un état défini par un \emph{run.level}. Par exemple le mode multi-user (généralement \emph{rc2.d}), il a un \emph{run.level} \emph{rc0} pour l'extinction, le single user le \emph{rcS}\dots
+  
+  Ces états sont décrits dans un fichier particulier \emph{/etc/inittab}.
+  
+
+  \subsection{Interface de connexion graphique}
+  
+	L'interface de connexion graphique est maintenant lancé par défaut pour la plupart des \GNULinux. 
+	
+	Cette interface vous permet de vous authentifier et de lancer votre  bureau préféré. 
+	
+	Une interface a été créée par la plupart des bureaux mais vous avez avoir une interface GNOME et lancer KDE.
+  
+  
+
+  
+	Les plus connues sont évidemment celles des bureaux les plus connus~: \emph{kdm} (KDE), \emph{gdm} (GNOME), \emph{lightdm} (LXDE),\dots
+	
+  La méthode la plus simple pour reconfigurer l'interface de démarrage (passer de l'une à l'autre) est de lancer la configuration de l'interface installée~:
+	\begin{verbatim}
+dpkg-reconfigure gdm	
+	\end{verbatim}
+  
+
+  \subsection{Xorg, Wayland}
+  
+	Xorg est une couche logicielle qui permet d'avoir des interfaces graphiques sous \GNULinux. 
+	
+	Il provient d'une ancètre qui s'appellait X sous UNIX. Il est en passe d'être remplacer dans les prochains mois par Wayland. C'est déjà le cas sous Fedora.
+  
+	C'est la couche qui va gérer votre écran, votre souris, \dots Il est à l'interface entre le bureau et le matériel.
+		
+
+
+  \subsection{Bureau}
+	
+	Le bureau est schématiquement un gestionnaire de fenêtre avec des applications dédiées.
+	
+	Les plus connus sont GNOME, KDE, Mate, Cinnamon, \dots
+  
+	  
+
+  \subsection{En cas de problème lors du démarrage}
+	
+	Si votre ordinateur sous \GNULinux ne démarre pas, il existe des solutions plus ou moins simples pour savoir ce qui cloche~:
+	\begin{enumerate}
+		\item Si le menu GRUB ne s'affiche pas c'est que le boot ou l'UEFI ne marche pas
+		\item Si \Windows se lance au lieu de \GNULinux c'est que le boot ou l'UEFI ne marche pas
+		\item Si en appuyant sur \emph{ESC} vous voyez que l'ordinateur bloque sur un service, c'est peut être ce service
+		\item Si l'ordinateur s'arrête et demande à passer en root pour des réparations, un service ou un périphérique (ex~: disque dur manquant) ne fonctionne pas
+	\end{enumerate}
+	  
+
+
+	
+	\begin{enumerate}
+		\item Si l'ordinateur reste noir ou bloqué sur l'écran de démarrage, vous pouvez essayer de voir si la console est disponible sur les autres terminals (CTRL+ALT+F1, CTRL+ALT+F2,\dots). Si une console est disponible, alors c'est l'interface de démarrage graphique qui bloque ou Xorg.
+		\item Si l'ordinateur revient à l'interface graphique de connexion par exemple c'est le bureau qui est en cause ou votre \emph{home} directory (le bureau ne démarre pas si votre home n'est pas accessible en lecture ou s'il est plein).
+	\end{enumerate}
+	  
+
+
+
+

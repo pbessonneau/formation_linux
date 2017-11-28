@@ -1,0 +1,231 @@
+\input{header}
+
+\subtitle{Travailler en mode console}
+
+
+\newcommand{\hreff}[2]{\underline{\href{#1}{#2}\xspace}}
+
+\begin{document}
+
+\begin{frame}
+	\maketitle
+\end{frame}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+% Begin document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Accéder au terminal}
+
+\subsection{Introduction}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Terminal/Console}
+
+	Le Terminal est souvent nécessaire sous \Linux. Plus précisement il est souvent plus facile de passer
+	par le Terminal pour faire des réglages qu'en mode graphique.
+	
+	C'est à la fois un plus et le talon d'Achille de \Linux.
+		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Terminal/Console}
+
+	Le Terminal est souvent dans le répertoire des outils systèmes (KDE, Cinnamon,\dots). Il s'appelle \emph{Terminal} dans Gnome3. 
+	
+	On peut le lancer et ouvrir plusieurs sessions (les logiciels supportent quasiment tous plusieurs
+	sessions). Chaque session étant indépendante.
+	
+	La console est aussi accessible sur les bureaux CTRL+ALT+F1, CTRL+ALT+F2, \dots,  CTRL+ALT+F5.	Initialement l'interface graphique était sur le bureau 6 ou 7 maintenant on peux le trouver sur le bureau 1 ou 2.
+	
+\end{frame}
+
+\section{Commandes primaires}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Raccourcis clavier}
+
+	Vous pouvez utiliser la flêche haute pour rappeler des commandes déjà soumises.
+	\vspace{1em}
+	Si vous tapez le début d'une commande ou d'un fichier vous pouvez compléter avec Tab.
+		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Terminal/Console}
+
+	Les commandes primaires seront~:
+	\begin{description}
+		\item[cd] change de répertoire. Pour changer de répertoire il suffit de donner son nom, vide vous retournez à votre répertoire personnel.
+		\item[ls] liste les fichiers et répertoires. Pour avoir les détails sur les fichiers utiliser \emph{ls -l}
+		\item[cp] copie les fichiers et répertoires. 
+		\item[mv] copie les fichiers et répertoires. 
+		\item[pwd] affiche le répertoire courant (actif)
+		\item[nano] éditeur de texte. il suffit d'ajouter le nom du fichier à ouvrir
+	\end{description}
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{cd}
+		
+		\begin{description}
+			\item[cd] retourne au répertoire personnel
+			\item[cd ..] va au répertoire parent
+			\item[cd items/sauvegarde] va dans le répertoire items/sauvegarde
+			\item[cd /var/items/sauvegarde] va dans le répertoire /var/items/sauvegarde
+			\item[cd \textasciitilde pascal] va dans le répertoire personnel de pascal
+		\end{description}
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{ls}
+		
+		\begin{description}
+			\item[ls] liste les fichiers
+			\item[ls -l] liste les fichiers avec les détails
+			\item[ls -la] liste les fichiers avec les détails y compris les fichiers cachés
+		\end{description}
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{cp}
+		
+		\begin{description}
+			\item[cp a b] copie le fichier a en b
+			\item[cp -f a b] écrase le fichier b avec le contenu du fichier a
+			\item[cp -R d e] copie tout le répertoire d dans le répertoire e
+		\end{description}
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{mv}
+		
+		\begin{description}
+			\item[mv a b] déplace le fichier a en b
+			\item[mv -f a b] déplace en écrasant le fichier b avec le contenu du fichier a
+			\item[mv -R d e] déplace tout le répertoire en répertoire e
+		\end{description}
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{pwd}
+		
+		Pour p(ath) w(orking) d(irectory), cette commande affiche le répertoire courant ou actif.
+		
+		
+\end{frame}
+
+\section{Utilitaires pour le texte}
+
+
+\begin{frame}[containsverbatim]
+  \frametitle{Copier/Coller dans un Terminal}
+		
+		Pour copier un texte depuis la console, il faut utiliser la commande \emph{CTRL+INS} et pour 
+		coller dans la console, il faut utiliser la commande \emph{SHIFT+INS}. 
+		
+\end{frame}
+
+
+\begin{frame}[containsverbatim]
+  \frametitle{nano}
+		
+		\begin{description}
+			\item[nano fichier] ouvre le fichier fichier
+		\end{description}
+
+			\begin{itemize}
+    \item Pour écrire dans un fichier ou le sauvegarder, utilisez Ctrl-o
+    \item Pour quitter Nano, Ctrl-x
+    \item Pour rechercher dans le fichier, Ctrl-w
+\end{itemize}
+	
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{nano}
+		
+		Pour le copier/coller, il faut au début du texte à copier faire CTRL-shift-6, puis flèche gauche/droite pour sélectionner le texte.
+		
+		La sélection finie il faut appuyer sur Alt-Shift-6.
+		
+		Pour le coller, il faut appuyer sur CTRL-u.
+				
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{nano}
+		
+		Pour l'affichage de fichiers texte comme les logs il y a 4 commandes à se rappeler~:
+		
+		\begin{itemize}
+			\item[head -<n>] affiche les n premières lignes d'un fichier
+			\item[tail -<n>] affiche les n premières lignes d'un fichier
+			\item[cat] affiche tout le fichier dans la console du haut vers le bas
+			\item[tac] affiche tout le fichier dans la console du bas vers le haut
+		\end{itemize}
+				
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{more}
+		
+		Pour l'affichage de grands fichiers texte~: \emph{more} ou \emph{less} affiche le fichier 
+		page par page (espace pour changer de page et q pour quitter)
+				
+\end{frame}
+
+\section{le \emph{PATH}}
+\begin{frame}[containsverbatim]
+  \frametitle{Notion}
+		
+		Le \emph{PATH} est l'ordre et les répertoires dans lequels le système va chercher 
+		les fichiers exécutables.
+		
+		On peut le visualiser en tapant la commande \emph{echo $PATH}.
+		 
+		 Le système va d'abord chercher les exécutables dans le \emph{PATH} dans l'ordre 
+		 donné par l'ordre des répertoires dans le \emph{PATH}.
+		 
+		 Le répertoire courant est utilisé si l'exécutable n'est pas trouvé dans le \emph{PATH}.
+		 		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Appel d'un exécutable}
+		
+		Ainsi si on écrit un exécutable \emph{more} et on qu'on essaie de l'appeler alors qu'il 
+		est dans le répertoire courant, le système va préférer le \emph{more} présent dans \emph{/bin}.
+		
+		Pour lancer l'exécutable du répertoire courant, il faut l'appeler par la commande \emph{./more}.
+		
+		A noter que ce n'est pas recommandé de donner le nom à un exécutable d'un programme exécutable.
+		
+		Pour savoir quel est le répertoire d'un exécutable dans le \emph{PATH} 
+		il faut utiliser la commande \emph{which}.
+		
+		 		
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Trouver le répertoire d'une commande système}
+		
+		Pour savoir quel est le répertoire d'un exécutable dans le \emph{PATH} 
+		il faut utiliser la commande \emph{which}.
+\begin{verbatim}
+pascal@pascal-ordi:~$ which more
+/bin/more
+\end{verbatim}
+		 		
+\end{frame}
+
+
+\end{document}
